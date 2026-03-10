@@ -10,16 +10,13 @@ export const runtime = "nodejs";
  *
  * Called by the WordPress plugin before every chatbot request.
  * Body: { licenseKey: string, domain: string }
- * Header: x-api-secret must match VERIFY_API_SECRET env var.
+ *
+ * Security is enforced by license key + domain binding, not a shared secret.
+ * The shared secret offered no real protection since it would be stored on
+ * the user's WordPress site and readable by the site owner anyway.
  */
 export async function POST(req: NextRequest) {
-  // 1. Validate shared server-to-server secret
-  const apiSecret = req.headers.get("x-api-secret");
-  if (!apiSecret || apiSecret !== process.env.VERIFY_API_SECRET) {
-    return NextResponse.json({ allowed: false, reason: "Invalid request" }, { status: 401 });
-  }
-
-  // 2. Parse and validate body
+  // 1. Parse and validate body
   let body: { licenseKey?: string; domain?: string };
   try {
     body = await req.json();
