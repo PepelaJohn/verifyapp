@@ -1,6 +1,6 @@
-import type { IronSessionOptions } from "iron-session";
+import type { SessionOptions } from "iron-session";
 
-export const sessionOptions: IronSessionOptions = {
+export const sessionOptions: SessionOptions = {
   password: process.env.SESSION_SECRET as string,
   cookieName: "chatbot_admin_session",
   cookieOptions: {
